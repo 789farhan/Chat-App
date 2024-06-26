@@ -6,15 +6,14 @@ import { Auth, db, storage } from "@/firebase";
 import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-// import { useNavigate } from "react-router-dom";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 export default function Register() {
   let { register, handleSubmit } = useForm();
 
   const [Err, setErr] = useState<boolean>(false);
 
-  // const navigate = useNavigate();
-  const router =useRouter()
+  const router = useRouter();
 
   const formdata = async (data: any) => {
     //Password require atleast 6 characters for POST Request
@@ -51,17 +50,16 @@ export default function Register() {
                 displayName: data.name,
                 photoURL: downloadURL,
               });
-              // Add document in collection
+              // Add userData in collection
               await setDoc(doc(db, "users", response.user.uid), {
                 name: data.name,
                 email: data.email,
                 id: response.user.uid,
                 avatar: downloadURL,
               });
-              await setDoc(doc(db,'chatroom',response.user.uid),{})
+              await setDoc(doc(db, "chatroom", response.user.uid), {});
               // After register nevigate to the homepage
-               router.push('/');
-              // navigate("/");
+              router.push("/");
             })
             .catch((error) => {
               console.error("Error getting download URL:", error);
@@ -114,7 +112,7 @@ export default function Register() {
           <button>Sign up</button>
         </form>
         {Err && <span>Something went wrong</span>}
-        <p>Do you have an account? Login</p>
+        <p>Do you have an account? <Link href={'/login'}>Login</Link></p>
       </div>
     </div>
   );

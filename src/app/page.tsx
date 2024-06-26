@@ -1,19 +1,13 @@
 "use client";
-import Register from "./register/page"; // Import Register component
-import Login from "./login/page";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Homepage from "@/components/homepage/Homepage";
+import { AuthContext } from "@/components/authcontext/AuthContext";
+import Homepage from "@/components/homepage/homepage/Homepage";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
 export default function Page() {
+  const { currentUser }: any = useContext(AuthContext);
+  const NevigateToLoginPage = useRouter();
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/">
-          <Route index element={<Homepage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>{!currentUser ? NevigateToLoginPage.push("/login") : <Homepage />}</>
   );
 }
